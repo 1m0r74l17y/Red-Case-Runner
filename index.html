@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<!-- saved from url=(0024)http://rotendahl.dk/temp -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <title>Red Case Runner</title>
+    <link rel="stylesheet" type="text/css" href="./rcr.css">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<style type="text/css"></style><style type="text/css">@font-face {
+  font-family: "PjsEmptyFont";
+  src: url('data:application/x-font-ttf;base64,AAEAAAAKAIAAAwAgT1MvMgAAAAAAAAEoAAAAVmNtYXAAAAAAAAABiAAAACxnbHlmAAAAAAAAAbwAAAAkaGVhZAAAAAAAAACsAAAAOGhoZWEAAAAAAAAA5AAAACRobXR4AAAAAAAAAYAAAAAGbG9jYQAAAAAAAAG0AAAABm1heHAAAAAAAAABCAAAACBuYW1lAAAAAAAAAeAAAAAgcG9zdAAAAAAAAAIAAAAAEAABAAAAAQAAAkgTY18PPPUACwAgAAAAALSRooAAAAAAyld0xgAAAAAAAQABAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAEAAAACAAIAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACMAIwAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAMAAQAAAAwABAAgAAAABAAEAAEAAABB//8AAABB////wAABAAAAAAAAAAgAEgAAAAEAAAAAAAAAAAAAAAAxAAABAAAAAAABAAEAAQAAMTcBAQAAAAAAAgAeAAMAAQQJAAEAAAAAAAMAAQQJAAIAAgAAAAAAAQAAAAAAAAAAAAAAAAAA')
+       format('truetype');
+}</style></head>
+ <body>
+   <nav class="navbar navbar-default">
+     <div class="container-fluid">
+       <!-- Brand and toggle get grouped for better mobile display -->
+       <div class="navbar-header">
+         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+           <span class="sr-only">Toggle navigation</span>
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+         </button>
+         <a class="navbar-brand" href="/index.html">Tobias</a>
+       </div>
+
+       <!-- Collect the nav links, forms, and other content for toggling -->
+       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+         <ul class="nav navbar-nav">
+           <li><a href="/index.html">Home <span class="sr-only">(current)</span></a></li>
+           <li class="dropdown active">
+             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Spil <span class="caret"></span></a>
+             <ul class="dropdown-menu">
+               <li class="active"><a href="/rcr">Red Case Runner</a></li>
+             </ul>
+           </li>
+         </ul>
+         <ul class="nav navbar-nav navbar-right">
+           <li><a href="/contact/index.html">Contact</a></li>
+           <li><a>TobiasDalaaContact@gmail.com</a></li>
+           </li>
+         </ul>
+       </div><!-- /.navbar-collapse -->
+     </div><!-- /.container-fluid -->
+   </nav>
+    <p align="center">
+	<!--This draws the Canvas on the webpage -->
+      <canvas id="mycanvas" tabindex="0" width="900" height="600" style="image-rendering: -webkit-optimize-contrast !important;"></canvas>
+    </p>
+<p>
+<br />
+</p>
+ <!-- Run all the JavaScript stuff -->
+ <!-- Include the processing.js library -->
+ <!-- See https://khanacademy.zendesk.com/hc/en-us/articles/202260404-What-parts-of-ProcessingJS-does-Khan-Academy-support- for differences -->
+ <script src="./pros/processing.js"></script>
+
+ <script>
+
+    var sketchProc = function(processingInstance) {
+     with (processingInstance) {
+        size(900, 600);
+        frameRate(60);
+        // ProgramCodeGoesHere
+		//Variabel liste
+		var Runspeed = 10;
+		var timer = 0;
+        var runtimer = 0;
+        var backx = 0;
+        var backy = 0;
+        var backx2 = 1800;
+		var floorX = 335;
+		var konami = 0;
+		var topY = 100;
+        var backy2 = 0;
+        var backtimer = 0
+		var punchLines = ["Spikes! Spikes! Spiiiikes!", "U are going 2 pay for this!", "Those spikes look sharp�", "Good luck with that.",
+		"Arhhh! Give it back!", "Why are u doing this?", "Die already!", "Give that case back!",
+		"Call the cops guys.. Oh wait never mind!", "Mine-turtles! Du-dum!"];
+		var speedUp = 10;
+		var speedDown = 60;
+		spikeImage = loadImage("spikes.png");
+		var spritetimer = 0;
+		//MAIN CHARACTER
+		var x = 200;
+		var y = 360;
+		var spriteHeight =128;
+		var spritex = 200
+		var spritey = 335;
+        var score = 0;
+		var scoretimer = 0;
+		var gameStartMode = true;
+		//SPIKES
+		var spikes = [];
+		var gameOverMode = false;
+
+		var goingUp   = false;
+		var inJump    = false;
+		var goingDown = false;
+		thomas_open = loadImage("thomas_open.png");
+		thomas_closed = loadImage("thomas_closed.png");
+		back1 = loadImage("background.png");
+		back2 = loadImage("background.png");
+		sprit1 = loadImage("figure-pic1.png");
+		sprit2 = loadImage("figure-pic2.png");
+		sprit3 = loadImage("figure-pic3.png");
+		sprit4 = loadImage("figure-pic4.png");
+		sprit5 = loadImage("figure-pic5.png");
+		sprit6 = loadImage("figure-pic6.png");
+		gameOver = loadImage("game_over_screen.png");
+		gameStart = loadImage("startup_screen.png");
+		konamiCredit = loadImage("backgroun_konami.png");
+
+
+
+
+		var charImage = sprit1;
+
+		var  keyPressed = function() {
+			if(keyCode === 87 && inJump === false){
+			// Hvis man trykker W
+				inJump  = true;
+				goingUp = true;
+			}
+			//Hvis man trykker S
+			if(keyCode === 83 && y + speedDown < floorX){
+				goingDown = true;
+				inJump    = false;
+				goingUp   = false;
+			}
+			if ((keyCode === 32 && gameOverMode === true) || (keyCode === 32 && gameStartMode === true)) {
+				gameOverMode = false;
+				score = 0;
+				scoretimer = 0;
+				Runspeed = 10;
+				gameStartMode = false;
+
+			}
+
+			  println("Keycode is: " + keyCode);
+		};
+
+		var thomas_talking = function(){
+          for (var i = 0; i < 10; i++) {
+
+          }
+            if(timer < 30){
+                image(thomas_open, 0, 10);
+            }
+            else{
+                image(thomas_closed, 0, 10);
+            }
+
+        }
+		var sprite = function(){
+
+              //println("timer: " + spritetimer);
+
+              if(spritetimer > 0 && spritetimer < 5){
+                  image(sprit1, x, y);
+              }else
+              if(spritetimer > 5 && spritetimer < 10){
+                  image(sprit3, x, y);
+              }else
+              if(spritetimer > 10 && spritetimer < 15){
+                  image(sprit4, x, y);
+              }else
+              if(spritetimer > 15 && spritetimer < 20){
+                  image(sprit5, x, y);
+              }
+
+              else{
+                  image(sprit6, x, y);
+              }
+
+          };
+		var konamiF = function () {
+
+
+
+			if (konami === 0 && keyCode === 38) {
+					konami = 1;
+			} else if(konami === 1 && keyCode === 38) {
+					konami = 2;
+			} else if(konami === 2 && keyCode === 40) {
+					konami = 3;
+			} else if(konami === 3 && keyCode === 40) {
+					konami = 4;
+			} else if(konami === 4 && keyCode === 37) {
+					konami = 5;
+			} else if(konami === 5 && keyCode === 39) {
+					konami = 6;
+			} else if(konami === 6 && keyCode === 37) {
+					konami = 7;
+			} else if(konami === 7 && keyCode === 39) {
+					konami = 8;
+			} else if(konami === 8 && keyCode === 66) {
+					konami = 9;
+			} else if(konami === 9 && keyCode === 65) {
+					konami = 10;
+			} else if(keyCode === 38) {
+					konami = 1;
+			} else {
+					konami = 0;
+			}
+			if(konami === 10) {
+
+		      println("konami" );
+
+
+
+
+
+			}
+		}
+
+		var lastSpikeTimestamp = 0;
+		var cheat = false;
+		var nextTimeInterval = 500;
+
+		var generateSpikes = function(){
+
+			var d = new Date();
+			var t = d.getTime();
+
+			if(t - lastSpikeTimestamp > nextTimeInterval){
+
+				var spike = {
+				x:1000,
+				y: floorX+99
+				};
+
+
+				spikes.push(spike);
+
+				//println("SPIKE MADE: " + spikes.length);
+
+				lastSpikeTimestamp = t;
+
+				nextTimeInterval = (900 + (Math.random()*1700)) * (10 / Runspeed);
+
+			}
+
+		};
+
+		var lastSpunchTimestamp = 0;
+		var nextPunchTimeInterval = 500;
+		var punchLinesIndex = 0;
+
+		var showPunchlines = function(){
+
+			var d2 = new Date();
+			var t2 = d2.getTime();
+
+			if(t2 - lastSpunchTimestamp > nextPunchTimeInterval){
+
+				punchLinesIndex = Math.round(Math.random() * (punchLines.length -1));
+
+				lastSpunchTimestamp = t2;
+
+				nextPunchTimeInterval = (200 + (Math.random()*5000)) * (10 / Runspeed);
+
+			}
+
+		};
+
+
+		var drawSpikes = function(){
+
+			for(var i = 0; i < spikes.length; i++){
+
+			var spike = spikes[i];
+
+
+			image(spikeImage,spike.x,spike.y);
+
+			//println("SPIKE MOVE: " + " index: " + i + " pos: " + spike.x);
+
+
+			spike.x = spike.x - Runspeed;
+
+
+			}
+
+			for(var i = spikes.length -1 ; i >= 0; i--){
+
+			if(spikes[i].x < -150){
+
+				spikes.splice(i,1);
+
+			}
+
+			}
+
+
+
+
+		};
+
+		var checkSpikeCollition = function(){
+
+		for(var i = 0; i < spikes.length; i++){
+
+			var spike = spikes[i];
+
+			if(((x + spriteHeight >= spike.x && x + spriteHeight <= spike.x + spikeImage.width )||
+				(x >= spike.x && x <= spike.x + spikeImage.width)) && (y + spriteHeight >= spike.y)){
+
+				if(gameStartMode === false) {
+					gameOverMode = true;
+				}
+
+			}
+
+			if(gameOverMode === true) {
+
+				image(gameOver, 0, 0);
+
+
+
+			}
+		}
+
+
+		};
+
+
+        var draw = function(){
+			image(back1, backx, backy);
+            image(back2, backx2, backy2);
+			if(gameOverMode === false && gameStartMode === false) {
+				generateSpikes();
+				showPunchlines();
+			}
+			sprite();
+			fill(0,0,0)
+            rect(730,20,160,30);
+            textSize(30)
+            fill(255,255,255)
+
+
+            text("Score:"+Math.round(score),729,45);
+
+			fill(0, 0, 0);
+			text(punchLines[punchLinesIndex],120,70);
+
+
+			if(y - speedUp < topY){
+				goingUp = false;
+			}
+			if(goingDown){
+				y += 60;
+			}
+			if(y >= floorX){
+				goingDown = false;
+				y = floorX;
+			}
+
+			if(goingUp) {
+				y -= speedUp;
+			}else if(!goingUp && y < floorX){
+				y += 15;
+			}else{
+				inJump = false;
+			}
+
+			if(y > height - spriteHeight){
+				y = height - spriteHeight;
+			}
+
+            if(timer > 60){
+                timer = 0;
+            }
+            if(backx <= -1800){
+              backx = 1800;
+            }
+			if(spritetimer >= 25){
+                  spritetimer = 0;
+              }
+            if(backtimer < 60){
+                backtimer = 0;
+            }
+            if(backx2 <= -1800){
+              backx2 = 1800;
+            }
+            timer ++;
+            backx -= Runspeed;
+            backx2 -=Runspeed;
+            thomas_talking();
+
+			if(gameOverMode === false) {
+			score = scoretimer/60;
+			}
+			if(gameOverMode === true) {
+				image(gameOver,0,0)
+			}
+
+
+			drawSpikes();
+
+			checkSpikeCollition();
+			if(runtimer === 150){
+				Runspeed += 0.3;
+				runtimer = 0;
+
+			}
+			runtimer++;
+			spritetimer++;
+			if(cheat === false){
+
+
+			scoretimer++;
+
+
+			if(gameStartMode === true) {
+			image(gameStart, 0, 0);
+			}
+
+			}
+			//println(scoretimer);
+
+
+        }
+
+
+    }};
+
+
+
+    // Get the canvas that Processing-js will use
+    var canvas = document.getElementById("mycanvas");
+    // Pass the function sketchProc (defined in myCode.js) to Processing's constructor.
+    var processingInstance = new Processing(canvas, sketchProc);
+ </script><span style="position: absolute; top: 0px; left: 0px; opacity: 0; font-family: PjsEmptyFont, fantasy;">AAAAAAAA</span>
+<div id="textC">
+<p> Jump on [W] dash down on [S]</p>
+</div>
+</body></html>
